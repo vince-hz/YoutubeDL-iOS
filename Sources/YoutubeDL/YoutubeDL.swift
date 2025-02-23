@@ -747,42 +747,42 @@ open class YoutubeDL: NSObject {
     }
     
     internal func export(_ url: URL) {
-        DispatchQueue.main.async {
-            let progress = self.downloader.progress
-            progress.localizedDescription = nil
-            progress.localizedAdditionalDescription = nil
-            progress.kind = .file
-            progress.fileOperationKind = .copying
-            progress.fileURL = url
-            progress.completedUnitCount = 0
-            progress.estimatedTimeRemaining = nil
-            progress.throughput = nil
-            progress.fileTotalCount = 1
-        }
+        // DispatchQueue.main.async {
+        //     let progress = self.downloader.progress
+        //     progress.localizedDescription = nil
+        //     progress.localizedAdditionalDescription = nil
+        //     progress.kind = .file
+        //     progress.fileOperationKind = .copying
+        //     progress.fileURL = url
+        //     progress.completedUnitCount = 0
+        //     progress.estimatedTimeRemaining = nil
+        //     progress.throughput = nil
+        //     progress.fileTotalCount = 1
+        // }
         
-        PHPhotoLibrary.shared().performChanges({
-            _ = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-            //                            changeRequest.contentEditingOutput = output
-        }) { (success, error) in
-            print(#function, success, error ?? "")
+        // PHPhotoLibrary.shared().performChanges({
+        //     _ = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+        //     //                            changeRequest.contentEditingOutput = output
+        // }) { (success, error) in
+        //     print(#function, success, error ?? "")
             
-            if let continuation = self.finishedContinuation {
-                continuation.yield(url)
-            } else {
-                notify(body: NSLocalizedString("Download complete!", comment: "Notification body"))
-            }
-            DispatchQueue.main.async {
-                let progress = self.downloader.progress
-                progress.fileCompletedCount = 1
-                do {
-                    let attributes = try FileManager.default.attributesOfItem(atPath: url.path) as NSDictionary
-                    progress.completedUnitCount = Int64(attributes.fileSize())
-                }
-                catch {
-                    progress.localizedDescription = error.localizedDescription
-                }
-            }
-        }
+        //     if let continuation = self.finishedContinuation {
+        //         continuation.yield(url)
+        //     } else {
+        //         notify(body: NSLocalizedString("Download complete!", comment: "Notification body"))
+        //     }
+        //     DispatchQueue.main.async {
+        //         let progress = self.downloader.progress
+        //         progress.fileCompletedCount = 1
+        //         do {
+        //             let attributes = try FileManager.default.attributesOfItem(atPath: url.path) as NSDictionary
+        //             progress.completedUnitCount = Int64(attributes.fileSize())
+        //         }
+        //         catch {
+        //             progress.localizedDescription = error.localizedDescription
+        //         }
+        //     }
+        // }
     }
         
     fileprivate static func movePythonModule(_ location: URL) throws {
