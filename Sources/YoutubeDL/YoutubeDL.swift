@@ -349,7 +349,15 @@ open class YoutubeDL: NSObject {
             dup2(stdout, STDOUT_FILENO)
             dup2(stderr, STDERR_FILENO)
             
+          if args.contains("ffprobe"), exitCode != 0 {
+            // TODO: ffprobe error may not close the filehandle...
+            popen.returncode = PythonObject(0)
+            result[0] = ""
+            result[1] = "ffprobe code \(exitCode)"
+            return Python.tuple(result)
+          } else {
             popen.returncode = PythonObject(exitCode)
+          }
             
             func read(pipe: Pipe) -> String? {
                 guard let string = String(data: pipe.fileHandleForReading.availableData, encoding: .utf8) else {
